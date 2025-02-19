@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch API Test</title>
+</head>
+
+<body>
+    <h1>Check Console for API Data</h1>
+    <script>
+        fetch("https://fakestoreapi.com/products?limit=5")
+            .then((response) => response.json())  // Convert response to JSON
+            .then((data) => console.log("Fetched data:", data))  // Log actual data
+            .catch((error) => console.error("Fetch error:", error));
+    </script>
+
+</body>
+
+</html>

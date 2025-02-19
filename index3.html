@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trial Fetch API</title>
+</head>
+
+<body>
+    <h1>Trial to Display Fake APIs</h1>
+    <button id="fetchButton">Get Data</button>
+    <div id="dataContainer"></div>
+    <div id="errorMessage"></div>
+
+    <script>
+        const fetchButton = document.getElementById('fetchButton');
+        const dataContainer = document.getElementById('dataContainer');
+        const errorMessage = document.getElementById('errorMessage');
+
+        fetchButton.addEventListener('click', () => {
+            dataContainer.innerHTML = '';
+            errorMessage.innerHTML = '';
+
+            fetch('https://fakestoreapi.com/products/category/jewelery')
+                .then(response => {
+                    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                    return response.json();  // changing it to json data
+                })  // End of the first .then()
+                .then(data => {
+                    // Prepare to display the data on the page
+                    let output = "<h2>Fetched Products:</h2>";
+                    data.forEach(product => {
+                        output += `<p><strong>${product.title}</strong><br>Price: $${product.price}</p>`;
+                    });
+                    // Insert the formatted data into the page
+                    dataContainer.innerHTML = output;
+                })  // End of the second .then()
+                .catch(error => {
+                    // If an error occurs, show the error message on the page
+                    errorMessage.textContent = "Error fetching data: " + error.message;
+                });  // End of the .catch()
+        });
+        //addEventListener ends here
+    </script>
+</body>
+
+</html>

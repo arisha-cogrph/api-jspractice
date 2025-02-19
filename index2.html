@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <button id="fetchButton">Fetch Data</button>
+    <div id="dataContainer"></div>
+    <div id="errorMessage"></div>
+
+    <script>
+        const fetchButton = document.getElementById('fetchButton');
+        const dataContainer = document.getElementById('dataContainer');
+        const errorMessage = document.getElementById('errorMessage');
+        //declaring variable → getting document based on the id written in the html body
+
+        //Clearing previous data before the new data is loaded and displayed starts
+        fetchButton.addEventListener('click', () => {
+            // Clear previous data and error messages
+            //addEventListener means you are adding an "event" as in if you do something (like click a button) and "event" will happen
+            dataContainer.innerHTML = '';
+            errorMessage.innerHTML = '';
+            //what this above code does is that it clears the content inside the dataContainer element before displaying new data
+            //in this current context, means clearing all the data after the button to make way for the API data to be displayed
+            // innerHTML = ''; means setting the content inside html body (innerHTML) into an empty string ('';)
+            //same as the  errorMessage.innerHTML = ''; it clears any previous error message before loading the new data into the browser
+
+
+            // Show loading message
+            dataContainer.innerHTML = 'Loading...';
+            //ends here
+
+            // Fetch data from an API command starts here
+            fetch('https://fakestoreapi.com/products')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    } //this part checks to see if the data fetched from API store is okay and can be loaded
+                    return response.json();  //in the case the data is loaded successfully, the data will be converted to json
+                })
+                .then(data => {
+                    // Prepare to display the data on the page
+                    let output = "<h2>Fetched Products:</h2>";  // Starting text
+                    data.forEach(product => {
+                        // Add each product's title and price to the output string. this is when the data is successfully displayed in browser
+                        output += `<p><strong>${product.title}</strong><br>Price: $${product.price}</p>`;
+                    });
+                    // Insert the formatted data into the page. with this code, you can see the fetched data displayed in browser
+                    dataContainer.innerHTML = output;
+                })
+                .catch(error => {
+                    // If an error occurs, show the error message on the page
+                    errorMessage.textContent = "Error fetching data: " + error.message;
+                });
+        });
+    </script>
+</body>
+
+</html>
