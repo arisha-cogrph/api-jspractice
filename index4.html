@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API fetch Practices</title>
+    <link rel="stylesheet" href="index4.css">
+</head>
+
+<body>
+    <h1>Display Different Information with Two Buttons</h1>
+    <button id="fetchButton1">Fetch Info 1</button>
+    <button id="fetchButton2">Fetch Info 2</button>
+    <div id="dataContainer" class="databucket1"></div>
+    <div id="errorMessage"></div>
+
+    <script>
+        // Define fetchData function before using it
+        function fetchData(infoType) {
+            const dataContainer = document.getElementById("dataContainer");
+            const errorMessage = document.getElementById("errorMessage");
+
+            dataContainer.innerHTML = '';  // Clear previous content
+            errorMessage.innerHTML = '';   // Clear previous error message
+
+            let url = '';  // Default to empty URL
+            if (infoType === 'info1') {
+                url = 'https://api.escuelajs.co/api/v1/categories'; // URL for Info 1
+            } else if (infoType === 'info2') {
+                url = 'https://api.escuelajs.co/api/v1/products'; // URL for Info 2
+            }
+
+            // Fetch data based on the selected URL
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                    return response.json();
+                })
+                .then(data => {
+                    let output = "<h2>Fetched Data:</h2>";
+                    data.forEach(item => {
+                        output += `<p><strong>${item.title || item.name}</strong><br>Price: $${item.price || 'N/A'}</p>`;
+                    });
+
+                    dataContainer.innerHTML = output;
+                })
+                .catch(error => {
+                    errorMessage.textContent = "Error fetching data: " + error.message;
+                });
+        }
+
+        // Now that fetchData is defined, you can safely add event listeners
+
+        const fetchButton1 = document.getElementById("fetchButton1");
+        const fetchButton2 = document.getElementById("fetchButton2");
+
+        // Event listener for the first button
+        fetchButton1.addEventListener('click', () => {
+            fetchData('info1');
+        });
+
+        // Event listener for the second button
+        fetchButton2.addEventListener('click', () => {
+            fetchData('info2');
+        });
+    </script>
+</body>
+
+</html>
